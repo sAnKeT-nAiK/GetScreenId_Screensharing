@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+       
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+        <article>
+            <section class="experiment" style="text-align:center;">
+                <br><button id="capture-screen">Capture Your Screen</button><hr>
+                <video controls autoplay style="width: 100%;background-repeat: no-repeat;background-size: 100%;background-image: url('');"></video>
+            </section>
+
+            <script>
+                document.getElementById('capture-screen').onclick = function() {
+
+                    getScreenId(function(error, sourceId, screen_constraints) {
+
+                        // console.info('getScreenId callback \n(error, sourceId, screen_constraints) =>\n', error, sourceId, screen_constraints);
+
+                        // document.getElementById('capture-screen').disabled = true;
+                        navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+                        navigator.getUserMedia(screen_constraints, function(stream) {
+                            // share this "MediaStream" object using RTCPeerConnection API
+
+                            document.querySelector('video').src = URL.createObjectURL(stream);
+
+                            stream.oninactive = stream.onended = function() {
+                                document.querySelector('video').src = null;
+                            };
+
+                        }, function(error) {
+                            console.error('getScreenId error', error);
+
+                        });
+                    });
+                };
+            </script>
+
+
+           
+<script src="getScreenId.js" >
+</script>
+</article>
+
+    </body>
+</html>
